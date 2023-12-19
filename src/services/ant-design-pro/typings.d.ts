@@ -2,6 +2,23 @@
 /* eslint-disable */
 
 declare namespace API {
+  type LoginEmailParams = {
+    email: string;
+    code?: string;
+    autoLogin?: boolean;
+  };
+  type LoginParams = {
+    username: string;
+    password: string;
+    autoLogin?: boolean;
+  };
+
+  type LoginResult = {
+    code: number;
+    message: string;
+    data?: any;
+  };
+  // ----
   type CurrentUser = {
     name?: string;
     avatar?: string;
@@ -21,12 +38,6 @@ declare namespace API {
     };
     address?: string;
     phone?: string;
-  };
-
-  type LoginResult = {
-    status?: string;
-    type?: string;
-    currentAuthority?: string;
   };
 
   type PageParams = {
@@ -59,13 +70,6 @@ declare namespace API {
   type FakeCaptcha = {
     code?: number;
     status?: string;
-  };
-
-  type LoginParams = {
-    username?: string;
-    password?: string;
-    autoLogin?: boolean;
-    type?: string;
   };
 
   type ErrorResponse = {
