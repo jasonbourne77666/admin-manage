@@ -31,8 +31,12 @@ const Login: React.FC = () => {
     };
   });
 
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
+  const fetchUserInfo = async (info: API.CurrentUser) => {
+    let userInfo = info;
+    if (!userInfo?.username) {
+      userInfo = (await initialState?.fetchUserInfo?.()) as API.CurrentUser;
+    }
+
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({
@@ -50,13 +54,15 @@ const Login: React.FC = () => {
 
       const data = await service({ ...values });
       if (data.code === 200) {
+        const { accessToken, refreshToken } = data?.data;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
         message.success('登录成功！');
-        // await fetchUserInfo();
-        // const urlParams = new URL(window.location.href).searchParams;
-        // history.push(urlParams.get('redirect') || '/');
+        await fetchUserInfo(data?.data);
+        const urlParams = new URL(window.location.href).searchParams;
+        history.push(urlParams.get('redirect') || '/');
         return;
       }
-      console.log(data);
     } catch (error) {
       console.log(error);
       message.error('登录失败，请重试！');

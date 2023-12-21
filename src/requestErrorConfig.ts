@@ -13,7 +13,11 @@ enum ErrorShowType {
 // 与后端约定的响应数据格式
 interface ResponseStructure {
   success: boolean;
-  data: any;
+  data: {
+    code: number;
+    data: any;
+    message: string;
+  };
   errorCode?: number;
   errorMessage?: string;
   showType?: ErrorShowType;
@@ -89,7 +93,11 @@ export const errorConfig: RequestConfig = {
   requestInterceptors: [
     (config: RequestOptions) => {
       // 拦截请求配置，进行个性化处理。
-      // const url = config?.url?.concat('?token = 123');
+      const accessToken = localStorage.getItem('accessToken');
+      config.headers = {
+        ...config.headers,
+        authorization: `Bearer ${accessToken}`,
+      };
       const url = config?.url;
       return { ...config, url };
     },
@@ -100,8 +108,14 @@ export const errorConfig: RequestConfig = {
     (response) => {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
-      if (data?.message !== 'success') {
-        message.error('请求失败！');
+
+      if (data?.code !== 200) {
+        message.error(data?.message);
+      }
+      if (data?.code === 401) {
+        message.error('登录过期，请重新登录！');
+        localStorage.removeItem('accessToken');
+        window.location.href = '/user/login';
       }
       return response;
     },

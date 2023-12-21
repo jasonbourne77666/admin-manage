@@ -41,3 +41,21 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
     ...(options || {}),
   });
 }
+
+/** 获取当前的用户 GET /api/user/info */
+export async function currentUser(options?: { [key: string]: any }) {
+  return request<{
+    data: API.CurrentUser;
+  }>('/api/user/info', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** 退出登录接口 POST /api/user/outLogin */
+export async function outLogin(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/outLogin', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}

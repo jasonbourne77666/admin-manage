@@ -18,27 +18,21 @@ declare namespace API {
     message: string;
     data?: any;
   };
-  // ----
+
   type CurrentUser = {
-    name?: string;
-    avatar?: string;
-    userid?: string;
+    username?: string;
+    headPic?: string;
+    id?: number;
     email?: string;
-    signature?: string;
-    title?: string;
-    group?: string;
-    tags?: { key?: string; label?: string }[];
-    notifyCount?: number;
-    unreadCount?: number;
-    country?: string;
-    access?: string;
-    geographic?: {
-      province?: { label?: string; key?: string };
-      city?: { label?: string; key?: string };
-    };
-    address?: string;
-    phone?: string;
+    roles?: string[];
+    isAdmin?: boolean;
+    isFrozen?: string;
+    nickName?: string;
+    permissions?: { code: string; description: string }[];
+    phoneNumber?: string;
   };
+
+  // ----
 
   type PageParams = {
     current?: number;

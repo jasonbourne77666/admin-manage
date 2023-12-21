@@ -29,19 +29,19 @@ export default [
     component: './Welcome',
   },
   {
-    path: '/admin',
-    name: 'admin',
+    path: '/sys',
+    name: '系统设置',
     icon: 'crown',
     access: 'canAdmin',
     routes: [
       {
-        path: '/admin',
-        redirect: '/admin/sub-page',
+        path: '/sys',
+        redirect: '/sys/user-page',
       },
       {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
+        path: '/sys/user-page',
+        name: '用户列表',
+        component: './System',
       },
     ],
   },
