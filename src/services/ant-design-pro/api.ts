@@ -52,7 +52,7 @@ export async function rule(
 
 /** 新建规则 PUT /api/rule */
 export async function updateRule(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+  return request<API.UserListItem>('/api/rule', {
     method: 'PUT',
     ...(options || {}),
   });
@@ -60,7 +60,7 @@ export async function updateRule(options?: { [key: string]: any }) {
 
 /** 新建规则 POST /api/rule */
 export async function addRule(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+  return request<API.UserListItem>('/api/rule', {
     method: 'POST',
     ...(options || {}),
   });

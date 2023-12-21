@@ -2,6 +2,12 @@
 /* eslint-disable */
 
 declare namespace API {
+  type Response<T = any> = {
+    code?: number;
+    message?: string;
+    data: T;
+  };
+
   type LoginEmailParams = {
     email: string;
     code?: string;
@@ -32,12 +38,41 @@ declare namespace API {
     phoneNumber?: string;
   };
 
-  // ----
-
-  type PageParams = {
-    current?: number;
+  type UserListParams = {
+    username?: string;
+    nickName?: string;
+    email?: string;
+    phoneNumber?: string;
+    isFrozen?: string;
+    pageNo?: number;
     pageSize?: number;
   };
+
+  type UserListItem = {
+    id: string;
+    username: string;
+    nickName: string;
+    email: string;
+    phoneNumber: string;
+    isFrozen: string;
+    headPic: string;
+    createTime: string;
+  };
+
+  type UserList = {
+    list?: UserListItem[];
+    /** 列表的内容总数 */
+    totalCount?: number;
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  type PageParams = {
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  // ----
 
   type RuleListItem = {
     key?: number;

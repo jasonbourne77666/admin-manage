@@ -36,12 +36,12 @@ export default [
     routes: [
       {
         path: '/sys',
-        redirect: '/sys/user-page',
+        redirect: '/sys/admin/list',
       },
       {
-        path: '/sys/user-page',
+        path: '/sys/admin/list',
         name: '用户列表',
-        component: './System',
+        component: './System/AdminList',
       },
     ],
   },
