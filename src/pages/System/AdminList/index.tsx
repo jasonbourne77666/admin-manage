@@ -1,22 +1,60 @@
-import { addRule, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
-import { getUserList } from '@/services/user';
+import { addRule, removeRule } from '@/services/ant-design-pro/api';
+import { getUserList, register, freeze, update, deleteUser } from '@/services/user';
 import { PlusOutlined } from '@ant-design/icons';
+import { useModel } from '@umijs/max';
 import type { ActionType, ProColumns, FormInstance } from '@ant-design/pro-components';
-import {
-  FooterToolbar,
-  ModalForm,
-  PageContainer,
-  ProDescriptions,
-  ProFormText,
-  ProFormTextArea,
-  ProTable,
-} from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
-import { Button, Drawer, Input, message } from 'antd';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { Button, Modal, message } from 'antd';
 import React, { useRef, useState } from 'react';
 // import type { FormValueType } from './components/Modal';
-// import UpdateForm from './components/Modal';
+import UserModalForm from './components/Modal';
 
+/**
+ * @en-US Add node
+ * @zh-CN 冻结用户
+ * @param fields
+ */
+const freezeUser = async (fields: API.FrozenParams) => {
+  const hide = message.loading('正在添加');
+  try {
+    const res = await freeze({ ...fields });
+    hide();
+    if (res.code === 200) {
+      message.success('冻结成功');
+      return true;
+    } else {
+      message.error('冻结失败');
+      return false;
+    }
+  } catch (error) {
+    hide();
+    message.error('冻结失败');
+    return false;
+  }
+};
+/**
+ * @en-US delete
+ * @zh-CN 删除用户
+ * @param fields
+ */
+const handleDelete = async (fields: { id: number | string }) => {
+  const hide = message.loading('正在添加');
+  try {
+    const res = await deleteUser({ ...fields });
+    hide();
+    if (res.code === 200) {
+      message.success('删除成功');
+      return true;
+    } else {
+      message.error('删除失败');
+      return false;
+    }
+  } catch (error) {
+    hide();
+    message.error('删除失败');
+    return false;
+  }
+};
 /**
  * @en-US Add node
  * @zh-CN 添加节点
@@ -90,24 +128,21 @@ const TableList: React.FC = () => {
    * @zh-CN 新建窗口的弹窗
    *  */
   const [createModalOpen, handleModalOpen] = useState<boolean>(false);
-  /**
-   * @en-US The pop-up window of the distribution update window
-   * @zh-CN 分布更新窗口的弹窗
-   * */
-  const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
-
-  const [showDetail, setShowDetail] = useState<boolean>(false);
-
   const actionRef = useRef<ActionType>();
   const tableRef = useRef<FormInstance>();
   const [currentRow, setCurrentRow] = useState<API.UserListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserListItem[]>([]);
+  const { initialState } = useModel('@@initialState');
 
   const columns: ProColumns<API.UserListItem>[] = [
     {
       title: '用户名',
       dataIndex: 'username',
       tip: 'The rule name is the unique key',
+    },
+    {
+      title: '用户角色',
+      dataIndex: 'roles',
+      renderText: (val: any) => `${val?.[0]?.name}`,
     },
     {
       title: '用户昵称',
@@ -134,6 +169,9 @@ const TableList: React.FC = () => {
           status: '1',
         },
       },
+      render(_, entity) {
+        return <span style={{ color: entity.isFrozen === '1' ? 'red' : '' }}>{_}</span>;
+      },
       fieldProps: {
         onChange: (e) => {
           tableRef.current?.submit();
@@ -151,6 +189,62 @@ const TableList: React.FC = () => {
       dataIndex: 'updateTime',
       search: false,
       valueType: 'dateTime',
+    },
+    {
+      title: '操作',
+      dataIndex: 'option',
+      valueType: 'option',
+      render: (_, record) => [
+        <a
+          key="config"
+          style={{ color: initialState?.currentUser?.id === record.id ? '#999' : '' }}
+          onClick={async () => {
+            if (initialState?.currentUser?.id === record.id) {
+              return;
+            }
+            Modal.confirm({
+              title: '提示',
+              content: `是否确认${record?.isFrozen === '1' ? '解冻' : '冻结'}该用户？`,
+              onOk: async () => {
+                const res = await freezeUser({ id: record.id });
+                if (res) {
+                  tableRef.current?.submit();
+                }
+              },
+            });
+          }}
+        >
+          {record?.isFrozen === '1' ? '解冻' : '冻结'}
+        </a>,
+        <a
+          key="edit"
+          onClick={() => {
+            setCurrentRow(record);
+            setTimeout(() => {
+              handleModalOpen(true);
+            }, 100);
+          }}
+        >
+          修改
+        </a>,
+        <a
+          key="del"
+          onClick={() => {
+            Modal.confirm({
+              title: '提示',
+              content: '是否确认删除该用户？',
+              onOk: async () => {
+                const res = await deleteUser({ id: record.id });
+                if (res) {
+                  tableRef.current?.submit();
+                }
+              },
+            });
+          }}
+        >
+          删除
+        </a>,
+      ],
     },
   ];
 
@@ -177,7 +271,6 @@ const TableList: React.FC = () => {
           </Button>,
         ]}
         request={async (params) => {
-          console.log('params', params);
           try {
             const res = await getUserList({
               pageNo: params.current,
@@ -201,6 +294,28 @@ const TableList: React.FC = () => {
         }}
         columns={columns}
       />
+
+      {createModalOpen && (
+        <UserModalForm
+          key={'createModal'}
+          updateModalOpen={createModalOpen}
+          onCancel={() => {
+            handleModalOpen(false);
+            setCurrentRow(undefined);
+          }}
+          values={currentRow}
+          onSubmit={async (value) => {
+            const service = value?.userId ? update : register;
+            const success = await service(value);
+
+            if (success.code === 200) {
+              message.success(`${currentRow?.id ? '修改' : '添加'}成功`);
+              handleModalOpen(false);
+              tableRef.current?.submit();
+            }
+          }}
+        />
+      )}
     </PageContainer>
   );
 };

@@ -19,6 +19,20 @@ declare namespace API {
     autoLogin?: boolean;
   };
 
+  type RegisterParams = {
+    username?: string;
+    password?: string;
+    email?: string;
+    nickName?: string;
+    phoneNumber?: string;
+    captcha?: string;
+    userId?: string;
+  };
+
+  type FrozenParams = {
+    id: string;
+  };
+
   type LoginResult = {
     code: number;
     message: string;
@@ -28,7 +42,7 @@ declare namespace API {
   type CurrentUser = {
     username?: string;
     headPic?: string;
-    id?: number;
+    id?: number | string;
     email?: string;
     roles?: string[];
     isAdmin?: boolean;
@@ -72,6 +86,12 @@ declare namespace API {
     pageSize?: number;
   };
 
+  type FakeCaptcha = {
+    code?: number;
+    message?: string;
+    data?: string;
+  };
+
   // ----
 
   type RuleListItem = {
@@ -94,11 +114,6 @@ declare namespace API {
     /** 列表的内容总数 */
     total?: number;
     success?: boolean;
-  };
-
-  type FakeCaptcha = {
-    code?: number;
-    status?: string;
   };
 
   type ErrorResponse = {
