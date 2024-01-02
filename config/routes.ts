@@ -43,6 +43,16 @@ export default [
         name: '用户列表',
         component: './System/AdminList',
       },
+      {
+        path: '/sys/role/list',
+        name: '角色列表',
+        component: './System/RoleList',
+      },
+      {
+        path: '/sys/role/permission',
+        name: '权限列表',
+        component: './System/PermissionList',
+      },
     ],
   },
   {

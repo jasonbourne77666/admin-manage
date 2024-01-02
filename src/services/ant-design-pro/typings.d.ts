@@ -92,6 +92,66 @@ declare namespace API {
     data?: string;
   };
 
+  // role
+  type RoleListParams = {
+    name?: string;
+    status?: string;
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  type RoleListItem = {
+    id?: number;
+    name?: string;
+    desc?: string;
+    status?: number;
+    updatedAt?: string;
+    createTime?: string;
+  };
+
+  type RoleList = {
+    list?: RoleListItem[];
+    /** 列表的内容总数 */
+    totalCount?: number;
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  type RoleAddParams = {
+    id?: number;
+    name: string;
+    desc?: string;
+  };
+
+  // Permission
+  type PermissionListParams = {
+    code?: string;
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  type PermissionListItem = {
+    id?: number;
+    code?: string;
+    desc?: string;
+    updatedAt?: string;
+    createTime?: string;
+  };
+
+  type PermissionList = {
+    list?: PermissionListItem[];
+    /** 列表的内容总数 */
+    totalCount?: number;
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  type PermissionAddParams = {
+    id?: number;
+    code: string;
+    desc?: string;
+  };
+
   // ----
 
   type RuleListItem = {

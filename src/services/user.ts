@@ -11,8 +11,8 @@ export async function getUserList(params: API.UserListParams, options?: { [key: 
   });
 }
 
-/** 注册 /api/user/register */
-export async function register(params: API.RegisterParams, options?: { [key: string]: any }) {
+/** 新增 /api/user/register */
+export async function register(params: API.UserListParams, options?: { [key: string]: any }) {
   return request<API.Response<Partial<API.UserListItem>>>('/api/user/register', {
     method: 'POST',
     data: { ...params },
