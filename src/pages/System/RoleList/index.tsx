@@ -92,7 +92,6 @@ const TableList: React.FC = () => {
           onClick={async () => {
             setCurrentRow(record);
             handleModalOpen(true);
-            console.log(record);
           }}
         >
           修改
@@ -124,7 +123,7 @@ const TableList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.RoleListItem, API.PageParams & API.RoleListItem>
-        headerTitle={'用户列表'}
+        headerTitle={'角色列表'}
         actionRef={actionRef}
         formRef={tableRef}
         cardBordered

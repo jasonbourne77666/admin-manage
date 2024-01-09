@@ -1,4 +1,3 @@
-import { addRule, removeRule } from '@/services/ant-design-pro/api';
 import { getUserList, register, freeze, update, deleteUser } from '@/services/user';
 import { PlusOutlined } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
@@ -15,7 +14,7 @@ import UserModalForm from './components/Modal';
  * @param fields
  */
 const freezeUser = async (fields: API.FrozenParams) => {
-  const hide = message.loading('正在添加');
+  const hide = message.loading('正在冻结');
   try {
     const res = await freeze({ ...fields });
     hide();
@@ -29,95 +28,6 @@ const freezeUser = async (fields: API.FrozenParams) => {
   } catch (error) {
     hide();
     message.error('冻结失败');
-    return false;
-  }
-};
-/**
- * @en-US delete
- * @zh-CN 删除用户
- * @param fields
- */
-const handleDelete = async (fields: { id: number | string }) => {
-  const hide = message.loading('正在添加');
-  try {
-    const res = await deleteUser({ ...fields });
-    hide();
-    if (res.code === 200) {
-      message.success('删除成功');
-      return true;
-    } else {
-      message.error('删除失败');
-      return false;
-    }
-  } catch (error) {
-    hide();
-    message.error('删除失败');
-    return false;
-  }
-};
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.UserListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addRule({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
-  }
-};
-
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
-// const handleUpdate = async (fields: FormValueType) => {
-//   const hide = message.loading('Configuring');
-//   try {
-//     await updateRule({
-//       name: fields.name,
-//       desc: fields.desc,
-//       key: fields.key,
-//     });
-//     hide();
-
-//     message.success('Configuration is successful');
-//     return true;
-//   } catch (error) {
-//     hide();
-//     message.error('Configuration failed, please try again!');
-//     return false;
-//   }
-// };
-
-/**
- *  Delete node
- * @zh-CN 删除节点
- *
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.UserListItem[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await removeRule({
-      key: selectedRows.map((row) => row.id),
-    });
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
     return false;
   }
 };
@@ -146,7 +56,7 @@ const TableList: React.FC = () => {
     },
     {
       title: '用户昵称',
-      dataIndex: 'nickname',
+      dataIndex: 'nickName',
       search: false,
       renderText: (val: string = '') => `${val}`,
     },
@@ -204,7 +114,7 @@ const TableList: React.FC = () => {
             }
             Modal.confirm({
               title: '提示',
-              content: `是否确认${record?.isFrozen === '1' ? '解冻' : '冻结'}该用户？`,
+              content: `是否确认${record?.isFrozen === '1' ? '恢复' : '冻结'}该用户？`,
               onOk: async () => {
                 const res = await freezeUser({ id: record.id });
                 if (res) {
@@ -214,7 +124,7 @@ const TableList: React.FC = () => {
             });
           }}
         >
-          {record?.isFrozen === '1' ? '解冻' : '冻结'}
+          {record?.isFrozen === '1' ? '恢复' : '冻结'}
         </a>,
         <a
           key="edit"

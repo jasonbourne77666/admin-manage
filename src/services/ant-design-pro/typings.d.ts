@@ -27,6 +27,7 @@ declare namespace API {
     phoneNumber?: string;
     captcha?: string;
     userId?: string;
+    roles?: number;
   };
 
   type FrozenParams = {
@@ -71,6 +72,7 @@ declare namespace API {
     isFrozen: string;
     headPic: string;
     createTime: string;
+    roles: any[];
   };
 
   type UserList = {
@@ -107,6 +109,7 @@ declare namespace API {
     status?: number;
     updatedAt?: string;
     createTime?: string;
+    permissions?: PermissionListItem[];
   };
 
   type RoleList = {

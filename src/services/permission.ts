@@ -14,6 +14,14 @@ export async function getPermissionList(
   });
 }
 
+/** 所有权限 GET /api/permission/getAll */
+export async function getPermissionAll(options?: { [key: string]: any }) {
+  return request<API.Response<API.PermissionList>>('/api/permission/getAll', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 新增 /api/permission/add */
 export async function permissionAdd(
   params: API.PermissionListItem,

@@ -14,6 +14,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       open={props.updateModalOpen}
       modalProps={{
         maskClosable: false,
+        destroyOnClose: true,
         onCancel: () => {
           props.onCancel();
         },

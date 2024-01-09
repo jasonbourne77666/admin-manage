@@ -11,6 +11,14 @@ export async function getRoleList(params: API.RoleListParams, options?: { [key: 
   });
 }
 
+/** role列表 GET /api/role/list */
+export async function getRoleAll(options?: { [key: string]: any }) {
+  return request<API.Response<API.RoleList>>('/api/role/getAll', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 新增 /api/role/add */
 export async function roleAdd(params: API.RoleListItem, options?: { [key: string]: any }) {
   return request<API.Response<string>>('/api/role/add', {
