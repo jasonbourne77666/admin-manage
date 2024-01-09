@@ -1,11 +1,11 @@
 pipeline {
     agent any
 
-    environment {
+    // environment {
         // 定义环境变量，例如 Docker 镜像名称
         // IMAGE_NAME = 'jasonbourne77666_server'
         // BUILD_NUMBER = '0.0.1'
-    }
+    // }
 
     stages {
         stage('Build') {
