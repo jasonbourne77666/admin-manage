@@ -41,12 +41,14 @@ pipeline {
                     // tar -xzvf dist.tar.gz
                     // cd dist
                     // sleep 5
+                    // docker restart nginx
                     // exit
                     // 流水线语法ssh选项 Exec in pty，Source files：dist.tar.gz， Remote directory /admin
                     sshPublisher(publishers: [sshPublisherDesc(configName: 'aliyun_server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd /project/admin
                     rm -rf dist
                     tar -xzvf dist.tar.gz
                     sleep 5
+                    docker restart nginx
                     exit''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/admin', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'dist.tar.gz', usePty: true)], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
                     
                     echo 'Credentials SUCCESS'
