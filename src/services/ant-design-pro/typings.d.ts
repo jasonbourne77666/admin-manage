@@ -155,6 +155,39 @@ declare namespace API {
     desc?: string;
   };
 
+  // Article
+  type ArticleListParams = {
+    title?: string;
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  type ArticleListItem = {
+    id?: number;
+    title?: string;
+    content?: string;
+    markdownContent?: string;
+    isMarkdow?: number;
+    viewCount?: number;
+    likeCount?: number;
+    collectCount?: number;
+    createTime?: string;
+    updateTime?: string;
+  };
+
+  type ArticleList = {
+    list?: ArticleListItem[];
+    /** 列表的内容总数 */
+    totalCount?: number;
+    pageNo?: number;
+    pageSize?: number;
+  };
+
+  type ArticleAddParams = {
+    id?: number;
+    title: string;
+    content: string;
+  };
   // ----
 
   type RuleListItem = {

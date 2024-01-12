@@ -56,10 +56,10 @@ export default [
     ],
   },
   {
-    name: 'list.table-list',
-    icon: 'table',
+    name: '博客列表',
+    icon: 'yuque',
     path: '/list',
-    component: './TableList',
+    component: './BlogList',
   },
   {
     path: '/',
